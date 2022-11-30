@@ -6,7 +6,7 @@ const OculusHomePage = require('../../POM/Facebook/OculusHomePage');
 
 describe('Facebook Multiple Windows Test Suite', () => {
 
-    it ('TC-1 Verify the Oculus page is launched in new window', async () => {
+    it.only ('TC-1 Verify the Oculus page is launched in new window', async () => {
 
         /**
          * TC-1
@@ -45,6 +45,7 @@ describe('Facebook Multiple Windows Test Suite', () => {
 
         // 3. Verify Support tab is displayed
         const isSupportDisplayed = await oculusHomePage.isSupportTabLinkDisplayed();
+        expect (isSupportDisplayed, 'Support tab link is NOT displayed').to.be.true;
         
 
         // 4. Verify the Oculus page is launched in new window
