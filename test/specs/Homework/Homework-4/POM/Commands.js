@@ -93,7 +93,15 @@ class Commands {
 
     }
 
-    
+    /**
+     * Generic function to move to a WebElement
+     * - WebDriverIO moveTo function
+     *  */  
+
+     async moveToWebElement (locator){
+        await $(locator).moveTo();
+
+    }
 
     
 

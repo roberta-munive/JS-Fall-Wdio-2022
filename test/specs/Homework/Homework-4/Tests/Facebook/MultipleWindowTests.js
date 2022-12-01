@@ -7,7 +7,7 @@ const OculusHomePage = require('../../POM/Facebook/OculusHomePage');
 
 describe('Facebook Multiple Windows Test Suite', () => {
 
-    it ('TC-1 Verify the Oculus page is launched in new window', async () => {
+    it.only ('TC-1 Verify the Oculus page is launched in new window', async () => {
 
         /**
          * TC-1
@@ -41,6 +41,7 @@ describe('Facebook Multiple Windows Test Suite', () => {
             }
         }
 
+        await browser.maximizeWindow();
         await browser.pause(2000);
 
 
@@ -54,7 +55,7 @@ describe('Facebook Multiple Windows Test Suite', () => {
         
     });
 
-    it.only ('TC-2 Close all windows except Meta Pay window',  async() => {
+    it ('TC-2 Close all windows except Meta Pay window',  async() => {
 
         /**
          * TC-2
