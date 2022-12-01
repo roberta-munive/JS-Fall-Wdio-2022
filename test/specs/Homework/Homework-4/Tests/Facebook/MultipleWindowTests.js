@@ -2,11 +2,12 @@ const { expect } = require("chai");
 const moment = require('moment');
 
 const LoginPage = require('../../POM/Facebook/LoginPage');
+const MetaPayHomePage = require("../../POM/Facebook/MetaPayHomePage");
 const OculusHomePage = require('../../POM/Facebook/OculusHomePage');
 
 describe('Facebook Multiple Windows Test Suite', () => {
 
-    it.only ('TC-1 Verify the Oculus page is launched in new window', async () => {
+    it ('TC-1 Verify the Oculus page is launched in new window', async () => {
 
         /**
          * TC-1
@@ -53,7 +54,7 @@ describe('Facebook Multiple Windows Test Suite', () => {
         
     });
 
-    it ('TC-2 Close all windows except Meta Pay window',  async() => {
+    it.only ('TC-2 Close all windows except Meta Pay window',  async() => {
 
         /**
          * TC-2
@@ -69,6 +70,7 @@ describe('Facebook Multiple Windows Test Suite', () => {
          */
 
          const loginPage = new LoginPage();
+         const metaPayHomePage = new MetaPayHomePage();
 
         // 1. Launch https://www.facebook.com/
         await browser.url('https://www.facebook.com/');
@@ -88,7 +90,9 @@ describe('Facebook Multiple Windows Test Suite', () => {
 
         // 6. Close all windows except 'Meta Pay' window
 
-        const allWindowHandles = await browser.getWindowHandles();
+        let allWindowHandles = await browser.getWindowHandles();
+
+        let metaPayHomePageWindowHandle = '';
 
         for(const handle of allWindowHandles){
 
@@ -96,11 +100,41 @@ describe('Facebook Multiple Windows Test Suite', () => {
             let pageTitle = await browser.getTitle();
             if(!pageTitle.startsWith('Meta Pay')){
                 await browser.closeWindow();
+            }else{
+                metaPayHomePageWindowHandle = await browser.getWindowHandle();
             }
 
         }
 
-        await browser.pause(7000);
+        await browser.pause(3000);
+
+        // 7. Verify 'Using Meta Pay' is displayed
+
+
+        await browser.switchToWindow(metaPayHomePageWindowHandle);
+        await browser.maximizeWindow();
+
+        await browser.pause(3000);
+
+
+        const textFromUsingMetaPayTab = await metaPayHomePage.getTextFromUsingMetaPayTabLink();
+
+        expect(textFromUsingMetaPayTab, 'Using Meta Pay is NOT displayed as expected').to.equal('Using Meta Pay');
+
+        // 8. Move mouse on 'Using Meta Pay'
+
+        await metaPayHomePage.moveMouseToUsingMetaPayTab();
+
+        await browser.pause(3000);
+
+        // 9. Verify 'Online Checkout' option is displayed
+
+        const textFromOnlineCheckoutOption = await metaPayHomePage.getTextFromOnlineCheckoutOption();
+
+        expect(textFromOnlineCheckoutOption, 'Online Checkout option is NOT displayed as expected').to.equal('Online Checkout');
+        
+        
+        
 
         
     });
